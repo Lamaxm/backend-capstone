@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from .models import Jobs
-from user.models import Profile
+from user.models import CompanyProfile
 from .serializers import JobsSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -22,7 +22,7 @@ def add_job(request: Request):
     if not user.is_authenticated:
         return Response({"msg" : "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
 
-    profile = Profile.objects.get(user=request.user)
+    profile = CompanyProfile.objects.get(user=request.user)
     request.data.update(user=profile.id)
     new_job = JobsSerializer(data=request.data)
     if new_job.is_valid():
